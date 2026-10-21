@@ -1,17 +1,477 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دليل الطالب</title>
+    <title>دليل الطالب ENSTP - الصفحة الرسمية</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: 'var(--color-primary)',
+                        secondary: 'var(--color-secondary)',
+                        accent: 'var(--color-accent)',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Three.js for 3D Animation Background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background-color: #f4f4f4; }
-        h1 { color: #333; }
-        p { color: #666; font-size: 18px; }
+        :root {
+            --color-primary: #3b82f6;
+            --color-secondary: #1d4ed8;
+            --color-accent: #06b6d4;
+            --bg-glass-dark: rgba(15, 23, 42, 0.75);
+            --bg-glass-light: rgba(255, 255, 255, 0.85);
+        }
+        
+        .theme-purple {
+            --color-primary: #8b5cf6;
+            --color-secondary: #6d28d9;
+            --color-accent: #ec4899;
+        }
+        .theme-emerald {
+            --color-primary: #10b981;
+            --color-secondary: #047857;
+            --color-accent: #14b8a6;
+        }
+        .theme-amber {
+            --color-primary: #f59e0b;
+            --color-secondary: #b45309;
+            --color-accent: #f97316;
+        }
+
+        body {
+            font-family: 'Tajawal', 'Poppins', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+            overflow-x: hidden;
+        }
+
+        /* Canvas for 3D Background */
+        #webgl-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .glass-card {
+            background: var(--bg-glass-dark);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .light .glass-card {
+            background: var(--bg-glass-light);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        /* 3D Tilt Hover Effect */
+        .card-3d {
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            transform-style: preserve-3d;
+        }
+        .card-3d:hover {
+            transform: translateY(-8px) rotateX(4deg) rotateY(-4deg);
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.5);
+            border-radius: 10px;
+        }
     </style>
 </head>
-<body>
-    <h1>مرحباً بكم في دليل الطالب</h1>
-    <p>هذا الموقع قيد الإنشاء، وسيقدم قريباً أدلة دراسية شاملة وموارد للطلاب.</p>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-primary selection:text-white">
+
+    <!-- 3D WebGL Background Canvas -->
+    <canvas id="webgl-bg"></canvas>
+
+    <!-- TOP TOOLBAR / NAVIGATION -->
+    <header class="sticky top-0 z-50 glass-card border-b border-slate-800/80 px-4 py-3 transition-all duration-300">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-3">
+            
+            <!-- Logo -->
+            <div class="flex items-center gap-3 cursor-pointer" onclick="switchView('landing')">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary to-accent flex items-center justify-center text-white text-xl font-black shadow-lg shadow-primary/30 animate-pulse">
+                    🎓
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+                        دليل الطالب <span class="text-primary">ENSTP</span>
+                    </h1>
+                    <p class="text-xs text-slate-400 font-medium">المدرسة الوطنية العليا للأشغال العمومية</p>
+                </div>
+            </div>
+
+            <!-- Global Control Bar (Theme, Font Size, Lang, Mode) -->
+            <div class="flex items-center gap-2 flex-wrap">
+                
+                <!-- Font Scaler -->
+                <div class="flex items-center bg-slate-800/60 rounded-lg p-1 border border-slate-700/50">
+                    <button onclick="changeFontSize(-1)" class="w-8 h-8 rounded text-slate-300 hover:bg-slate-700 flex items-center justify-center text-xs font-bold" title="تصغير الخط">A-</button>
+                    <button onclick="changeFontSize(1)" class="w-8 h-8 rounded text-slate-300 hover:bg-slate-700 flex items-center justify-center text-sm font-bold" title="تكبير الخط">A+</button>
+                </div>
+
+                <!-- Theme Color Selector -->
+                <div class="flex items-center gap-1.5 bg-slate-800/60 rounded-lg p-1.5 border border-slate-700/50">
+                    <button onclick="setThemeColor('default')" class="w-5 h-5 rounded-full bg-blue-500 hover:scale-110 transition-transform" title="Default Blue"></button>
+                    <button onclick="setThemeColor('purple')" class="w-5 h-5 rounded-full bg-purple-500 hover:scale-110 transition-transform" title="Neon Purple"></button>
+                    <button onclick="setThemeColor('emerald')" class="w-5 h-5 rounded-full bg-emerald-500 hover:scale-110 transition-transform" title="Emerald Green"></button>
+                    <button onclick="setThemeColor('amber')" class="w-5 h-5 rounded-full bg-amber-500 hover:scale-110 transition-transform" title="Warm Amber"></button>
+                </div>
+
+                <!-- Dark / Light Toggle -->
+                <button onclick="toggleDarkMode()" class="w-9 h-9 rounded-lg bg-slate-800/60 hover:bg-slate-700 border border-slate-700/50 flex items-center justify-center text-yellow-400 transition-all">
+                    <i id="theme-icon" class="fas fa-moon"></i>
+                </button>
+
+                <!-- Language Selector -->
+                <select id="lang-select" onchange="changeLanguage(this.value)" class="bg-slate-800/80 text-xs font-semibold text-slate-200 border border-slate-700 rounded-lg px-2.5 py-2 focus:outline-none focus:border-primary">
+                    <option value="ar">العربية 🇩🇿</option>
+                    <option value="fr">Français 🇫🇷</option>
+                    <option value="en">English 🇬🇧</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <!-- VIEW 1: LANDING / ONBOARDING PAGE -->
+    <div id="landing-view" class="flex-1 flex flex-col justify-center items-center px-4 py-12 text-center max-w-5xl mx-auto">
+        
+        <!-- Hero Tag -->
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-primary text-xs font-semibold mb-6 animate-bounce">
+            <i class="fas fa-sparkles"></i> <span data-i18n="hero_badge">المرافق والتوجيه الشامل للطلبة 2026</span>
+        </div>
+
+        <!-- Title -->
+        <h1 class="text-4xl md:text-6xl font-black mb-6 leading-tight" data-i18n="landing_title">
+            مرحباً بك في <span class="bg-gradient-to-r from-primary via-accent to-purple-400 bg-clip-text text-transparent">دليل الطالب ENSTP</span>
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="text-slate-300 md:text-lg max-w-2xl mb-10 leading-relaxed" data-i18n="landing_desc">
+            دليلك الشامل لرحلتك الجامعية بالمدرسة الوطنية العليا للأشغال العمومية. استكشف الدروس، المطاعم والوجبات، وسائل النقل، السكن، المنتدى الطلابي، والمساعد الذكي.
+        </p>
+
+        <!-- CTA Button -->
+        <button onclick="switchView('main')" class="group relative inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-primary to-secondary text-white font-bold text-lg shadow-xl shadow-primary/30 hover:shadow-primary/50 transition-all duration-300 hover:scale-105 active:scale-95">
+            <span data-i18n="start_btn">ابدأ الاستكشاف الآن</span>
+            <i class="fas fa-arrow-left group-hover:-translate-x-2 transition-transform ltr:rotate-180"></i>
+        </button>
+
+        <!-- Team & Credits Section -->
+        <div class="mt-16 pt-8 border-t border-slate-800/80 w-full max-w-3xl">
+            <p class="text-xs text-slate-400 mb-4 font-semibold uppercase tracking-widest" data-i18n="team_title">تم الإنجاز والمساهمة بواسطة طلبة المدرسة</p>
+            <div class="flex flex-wrap justify-center gap-4 text-xs font-medium text-slate-300">
+                <span class="px-3 py-1.5 rounded-lg glass-card border border-slate-700/50"><i class="fas fa-code text-primary mr-1"></i> Dib Group Deux</span>
+                <span class="px-3 py-1.5 rounded-lg glass-card border border-slate-700/50"><i class="fas fa-heart text-red-500 mr-1"></i> ENSTP Students</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEW 2: MAIN DASHBOARD & ALL SECTIONS -->
+    <div id="main-view" class="hidden flex-1 max-w-7xl w-full mx-auto px-4 py-8">
+        
+        <!-- Navigation Tabs -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-4 mb-8 custom-scroll border-b border-slate-800/80">
+            <button onclick="switchSection('food')" id="tab-food" class="tab-btn active px-4 py-2.5 rounded-xl font-semibold text-sm whitespace-nowrap bg-primary text-white shadow-lg transition-all">
+                <i class="fas fa-utensils mr-2"></i> <span data-i18n="tab_food">الأكل والتسوق</span>
+            </button>
+            <button onclick="switchSection('leisure')" id="tab-leisure" class="tab-btn px-4 py-2.5 rounded-xl font-semibold text-sm whitespace-nowrap glass-card hover:bg-slate-800 text-slate-300 transition-all">
+                <i class="fas fa-tree mr-2"></i> <span data-i18n="tab_leisure">الترفيه والثقافة</span>
+            </button>
+            <button onclick="switchSection('forum')" id="tab-forum" class="tab-btn px-4 py-2.5 rounded-xl font-semibold text-sm whitespace-nowrap glass-card hover:bg-slate-800 text-slate-300 transition-all">
+                <i class="fas fa-comments mr-2"></i> <span data-i18n="tab_forum">منتدى الطلاب</span>
+            </button>
+            <button onclick="switchSection('academic')" id="tab-academic" class="tab-btn px-4 py-2.5 rounded-xl font-semibold text-sm whitespace-nowrap glass-card hover:bg-slate-800 text-slate-300 transition-all">
+                <i class="fas fa-graduation-cap mr-2"></i> <span data-i18n="tab_academic">الدراسة والامتحانات</span>
+            </button>
+            <button onclick="switchSection('transport')" id="tab-transport" class="tab-btn px-4 py-2.5 rounded-xl font-semibold text-sm whitespace-nowrap glass-card hover:bg-slate-800 text-slate-300 transition-all">
+                <i class="fas fa-bus mr-2"></i> <span data-i18n="tab_transport">النقل والمواصلات</span>
+            </button>
+        </div>
+
+        <!-- SECTION 1: FOOD & SHOPPING -->
+        <div id="sec-food" class="section-content space-y-6">
+            <div class="flex justify-between items-center flex-wrap gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold" data-i18n="food_heading">المطاعم والمحلات المجهزة بالـ Menus</h2>
+                    <p class="text-sm text-slate-400" data-i18n="food_sub">اكتشف المطاعم المجاورة للجامعة والقوائم والأسعار مع آراء الطلاب</p>
+                </div>
+            </div>
+
+            <!-- Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Restaurant 1 -->
+                <div class="glass-card rounded-2xl p-5 card-3d flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <h3 class="text-lg font-bold">مطعم الفلفل والأرز</h3>
+                                <span class="text-xs text-primary font-medium"><i class="fas fa-map-marker-alt"></i> 350 متر عن ENSTP</span>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/20 text-green-400 border border-green-500/30">اقتصادي</span>
+                        </div>
+                        <p class="text-xs text-slate-300 mb-4">أكلات سريعة، وجبات تقليدية، وسندويشات متنوعة.</p>
+                        <div class="text-xs text-slate-400 space-y-1 mb-4">
+                            <p><i class="far fa-clock text-primary"></i> أوقات الفتح: 11:30 - 22:00</p>
+                            <p><i class="fas fa-star text-yellow-400"></i> 4.5 / 5 (120 تقييم)</p>
+                        </div>
+                    </div>
+                    <button onclick="openMenuModal('الفلفل والأرز')" class="w-full py-2.5 rounded-xl bg-primary/20 hover:bg-primary text-primary hover:text-white font-semibold text-sm border border-primary/30 transition-all">
+                        <i class="fas fa-book-open mr-2"></i> عرض قائمة الطعام (Menu)
+                    </button>
+                </div>
+
+                <!-- Restaurant 2 -->
+                <div class="glass-card rounded-2xl p-5 card-3d flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <h3 class="text-lg font-bold">مطعم التفاح</h3>
+                                <span class="text-xs text-primary font-medium"><i class="fas fa-map-marker-alt"></i> 500 متر عن القبة</span>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">متوسط</span>
+                        </div>
+                        <p class="text-xs text-slate-300 mb-4">وجبات غداء يومية، مشاوي، وأطباق إيطالية.</p>
+                        <div class="text-xs text-slate-400 space-y-1 mb-4">
+                            <p><i class="far fa-clock text-primary"></i> أوقات الفتح: 11:00 - 23:00</p>
+                            <p><i class="fas fa-star text-yellow-400"></i> 4.8 / 5 (85 تقييم)</p>
+                        </div>
+                    </div>
+                    <button onclick="openMenuModal('مطعم التفاح')" class="w-full py-2.5 rounded-xl bg-primary/20 hover:bg-primary text-primary hover:text-white font-semibold text-sm border border-primary/30 transition-all">
+                        <i class="fas fa-book-open mr-2"></i> عرض قائمة الطعام (Menu)
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- SECTION 2: LEISURE -->
+        <div id="sec-leisure" class="section-content hidden space-y-6">
+            <h2 class="text-2xl font-bold">مناطق الترفيه والثقافة القريبة</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="glass-card rounded-2xl p-5 card-3d">
+                    <h3 class="text-lg font-bold mb-2">منتزه حديقة التجارب الحامة</h3>
+                    <p class="text-xs text-slate-300 mb-4">من أجمل الحدائق التاريخية في الجزائر، مكان مثالي للاسترخاء والدراسة في الهواء الطلق.</p>
+                    <div class="text-xs text-slate-400 space-y-1">
+                        <p><i class="fas fa-route"></i> المسافة: 3.5 كلم (10 دقائق بالمترو)</p>
+                        <p><i class="fas fa-utensils"></i> المطاعم القريبة: مطاعم الحامة الشعبية ومقاهي المنتزه</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3: FORUM -->
+        <div id="sec-forum" class="section-content hidden space-y-6">
+            <div class="flex justify-between items-center">
+                <h2 class="text-2xl font-bold">منتدى الطلاب</h2>
+                <button onclick="alert('خاصية إضافة منشور جديد')" class="px-4 py-2 rounded-xl bg-primary text-white font-bold text-sm shadow-md">
+                    + إضافة منشور
+                </button>
+            </div>
+            <div class="glass-card rounded-2xl p-5">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center font-bold text-xs">أ</div>
+                    <div>
+                        <h4 class="text-sm font-bold">أمين - طالب سنة ثانية</h4>
+                        <span class="text-xs text-slate-400">منذ ساعة</span>
+                    </div>
+                </div>
+                <p class="text-xs text-slate-200 mb-4">هل من نصائح حول تحضير امتحانات الميكانيك الخطي هذا السداسي؟</p>
+                <div class="flex items-center gap-4 text-xs text-slate-400">
+                    <button class="hover:text-primary"><i class="far fa-heart"></i> 15 إعجاب</button>
+                    <button class="hover:text-primary"><i class="far fa-comment"></i> 4 تعليقات</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- AI CHATBOT FLOATING BUTTON & WINDOW -->
+    <div class="fixed bottom-6 right-6 z-50">
+        <button onclick="toggleAIChat()" class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-primary to-accent text-white shadow-2xl flex items-center justify-center text-2xl hover:scale-110 transition-transform">
+            🤖
+        </button>
+    </div>
+
+    <!-- AI CHAT MODAL -->
+    <div id="ai-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card rounded-3xl max-w-lg w-full h-[500px] flex flex-col p-5">
+            <div class="flex justify-between items-center pb-3 border-b border-slate-700">
+                <h3 class="font-bold flex items-center gap-2">🤖 المساعد الذكي ENSTP AI</h3>
+                <button onclick="toggleAIChat()" class="text-slate-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="flex-1 overflow-y-auto my-4 space-y-3 custom-scroll text-xs">
+                <div class="bg-slate-800 p-3 rounded-2xl max-w-[80%]">مرحباً! كيف يمكنني مساعدتك اليوم بخصوص الدراسة والمرفقات في ENSTP؟</div>
+            </div>
+            <div class="flex gap-2 pt-2 border-t border-slate-700">
+                <input type="text" placeholder="اكتب سؤالك هنا..." class="flex-1 bg-slate-800 text-xs text-white rounded-xl px-3 py-2 border border-slate-700 focus:outline-none">
+                <button class="px-4 py-2 bg-primary rounded-xl text-xs font-bold">إرسال</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT LOGIC -->
+    <script>
+        // Language Translations Object
+        const translations = {
+            ar: {
+                hero_badge: "المرافق والتوجيه الشامل للطلبة 2026",
+                landing_title: "مرحباً بك في دليل الطالب ENSTP",
+                landing_desc: "دليلك الشامل لرحلتك الجامعية بالمدرسة الوطنية العليا للأشغال العمومية. استكشف الدروس، المطاعم والوجبات، وسائل النقل، السكن، المنتدى الطلابي، والمساعد الذكي.",
+                start_btn: "ابدأ الاستكشاف الآن",
+                team_title: "تم الإنجاز والمساهمة بواسطة طلبة المدرسة",
+                tab_food: "الأكل والتسوق",
+                tab_leisure: "الترفيه والثقافة",
+                tab_forum: "منتدى الطلاب",
+                tab_academic: "الدراسة والامتحانات",
+                tab_transport: "النقل والمواصلات",
+                food_heading: "المطاعم والمحلات المجهزة بالـ Menus",
+                food_sub: "اكتشف المطاعم المجاورة للجامعة والقوائم والأسعار مع آراء الطلاب"
+            },
+            fr: {
+                hero_badge: "Guide & Orientation 2026",
+                landing_title: "Bienvenue sur le Guide Étudiant ENSTP",
+                landing_desc: "Votre guide complet à l'ENSTP. Explorez les cours, les menus des restaurants, le transport, le forum et l'assistant IA.",
+                start_btn: "Commencer l'exploration",
+                team_title: "Réalisé par les étudiants de l'ENSTP",
+                tab_food: "Restauration",
+                tab_leisure: "Loisirs & Culture",
+                tab_forum: "Forum Étudiant",
+                tab_academic: "Études & Examens",
+                tab_transport: "Transport",
+                food_heading: "Restaurants et Menus",
+                food_sub: "Découvrez les restaurants proches, leurs menus et avis"
+            },
+            en: {
+                hero_badge: "Student Guide 2026",
+                landing_title: "Welcome to ENSTP Student Guide",
+                landing_desc: "Your essential guide at ENSTP. Discover modules, restaurant menus, transport, student forum, and AI Assistant.",
+                start_btn: "Start Exploring Now",
+                team_title: "Created by ENSTP Students",
+                tab_food: "Food & Dining",
+                tab_leisure: "Leisure & Culture",
+                tab_forum: "Student Forum",
+                tab_academic: "Academics",
+                tab_transport: "Transport",
+                food_heading: "Restaurants & Menus",
+                food_sub: "Discover nearby restaurants, menus, prices, and reviews"
+            }
+        };
+
+        let currentLang = 'ar';
+        let currentFontSize = 16;
+
+        function switchView(view) {
+            if(view === 'main') {
+                document.getElementById('landing-view').classList.add('hidden');
+                document.getElementById('main-view').classList.remove('hidden');
+            } else {
+                document.getElementById('landing-view').classList.remove('hidden');
+                document.getElementById('main-view').classList.add('hidden');
+            }
+        }
+
+        function switchSection(sec) {
+            document.querySelectorAll('.section-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('bg-primary', 'text-white');
+                el.classList.add('glass-card', 'text-slate-300');
+            });
+            
+            document.getElementById('sec-' + sec).classList.remove('hidden');
+            const activeTab = document.getElementById('tab-' + sec);
+            activeTab.classList.add('bg-primary', 'text-white');
+            activeTab.classList.remove('glass-card', 'text-slate-300');
+        }
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if(translations[lang][key]) el.innerText = translations[lang][key];
+            });
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('light');
+            document.body.classList.toggle('dark');
+        }
+
+        function setThemeColor(theme) {
+            document.body.className = document.body.className.replace(/theme-\w+/g, '');
+            if(theme !== 'default') document.body.classList.add('theme-' + theme);
+        }
+
+        function changeFontSize(delta) {
+            currentFontSize = Math.min(Math.max(12, currentFontSize + delta), 22);
+            document.documentElement.style.fontSize = currentFontSize + 'px';
+        }
+
+        function toggleAIChat() {
+            document.getElementById('ai-modal').classList.toggle('hidden');
+        }
+
+        function openMenuModal(name) {
+            alert('قائمة الطعام الممتدة لمطعم: ' + name + '\n\n- أطباق يومية (400 دج)\n- سندويش دجاج (250 دج)\n- مشروبات منعشة (70 دج)');
+        }
+
+        // 3D Particles Canvas Script
+        const canvas = document.getElementById('webgl-bg');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.position.z = 30;
+
+        const geometry = new THREE.BufferGeometry();
+        const count = 300;
+        const positions = new Float32Array(count * 3);
+
+        for(let i = 0; i < count * 3; i++) {
+            positions[i] = (Math.random() - 0.5) * 100;
+        }
+
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const material = new THREE.PointsMaterial({ size: 1.5, color: 0x3b82f6, transparent: true, opacity: 0.6 });
+        const points = new THREE.Points(geometry, material);
+        scene.add(points);
+
+        function animate() {
+            requestAnimationFrame(animate);
+            points.rotation.y += 0.001;
+            points.rotation.x += 0.0005;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
 </body>
 </html>
