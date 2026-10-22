@@ -1,477 +1,756 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" class="dark">
+<html lang="fr" dir="ltr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دليل الطالب ENSTP - الصفحة الرسمية</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        primary: 'var(--color-primary)',
-                        secondary: 'var(--color-secondary)',
-                        accent: 'var(--color-accent)',
-                    }
-                }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guide de Survie ENSTP - Digital Student Platform</title>
+  
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <!-- Google Fonts: Poppins & Cairo -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- TailwindCSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- GSAP for Smooth Animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+            },
+            accent: {
+              pink: '#ec4899',
+              amber: '#f59e0b',
+              emerald: '#10b981',
+              cyan: '#06b6d4',
+              purple: '#a855f7'
             }
+          },
+          fontFamily: {
+            cairo: ['Cairo', 'sans-serif'],
+            poppins: ['Poppins', 'sans-serif']
+          }
         }
-    </script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <!-- Three.js for 3D Animation Background -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+      }
+    }
+  </script>
 
-    <style>
-        :root {
-            --color-primary: #3b82f6;
-            --color-secondary: #1d4ed8;
-            --color-accent: #06b6d4;
-            --bg-glass-dark: rgba(15, 23, 42, 0.75);
-            --bg-glass-light: rgba(255, 255, 255, 0.85);
-        }
-        
-        .theme-purple {
-            --color-primary: #8b5cf6;
-            --color-secondary: #6d28d9;
-            --color-accent: #ec4899;
-        }
-        .theme-emerald {
-            --color-primary: #10b981;
-            --color-secondary: #047857;
-            --color-accent: #14b8a6;
-        }
-        .theme-amber {
-            --color-primary: #f59e0b;
-            --color-secondary: #b45309;
-            --color-accent: #f97316;
-        }
+  <style>
+    body {
+      font-family: 'Poppins', 'Cairo', sans-serif;
+      background: #f8fafc;
+      overflow-x: hidden;
+      color: #0f172a;
+    }
 
-        body {
-            font-family: 'Tajawal', 'Poppins', sans-serif;
-            transition: background-color 0.3s, color 0.3s;
-            overflow-x: hidden;
-        }
+    /* Ambient animated mesh background */
+    .ambient-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.15), transparent 40%),
+                  radial-gradient(circle at 85% 85%, rgba(236, 72, 153, 0.12), transparent 45%),
+                  radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.12), transparent 50%),
+                  linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
+      animation: pulseBg 12s ease-in-out infinite alternate;
+    }
 
-        /* Canvas for 3D Background */
-        #webgl-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
-            pointer-events: none;
-        }
+    @keyframes pulseBg {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(30deg); }
+    }
 
-        .glass-card {
-            background: var(--bg-glass-dark);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .light .glass-card {
-            background: var(--bg-glass-light);
-            border: 1px solid rgba(0, 0, 0, 0.08);
-        }
+    /* Glassmorphism containers */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05),
+                  0 0 20px rgba(99, 102, 241, 0.08);
+    }
 
-        /* 3D Tilt Hover Effect */
-        .card-3d {
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
-            transform-style: preserve-3d;
-        }
-        .card-3d:hover {
-            transform: translateY(-8px) rotateX(4deg) rotateY(-4deg);
-            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.3);
-        }
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    }
 
-        .custom-scroll::-webkit-scrollbar {
-            width: 6px;
-        }
-        .custom-scroll::-webkit-scrollbar-thumb {
-            background: rgba(156, 163, 175, 0.5);
-            border-radius: 10px;
-        }
-    </style>
+    /* 3D Circular Orbit Stage */
+    .orbit-stage {
+      perspective: 1200px;
+      position: relative;
+      width: 100%;
+      height: 480px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .orbit-ring {
+      position: relative;
+      width: 320px;
+      height: 320px;
+      transform-style: preserve-3d;
+      transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    /* 3D Circle Node Cards */
+    .orbit-card {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 140px;
+      height: 140px;
+      margin-top: -70px;
+      margin-left: -70px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background: radial-gradient(circle at 30% 30%, #ffffff, #f1f5f9);
+      box-shadow: 0 15px 35px rgba(99, 102, 241, 0.2),
+                  inset 0 2px 4px rgba(255, 255, 255, 0.9),
+                  0 0 0 4px rgba(255, 255, 255, 0.6);
+      transition: all 0.5s ease;
+      transform-style: preserve-3d;
+    }
+
+    .orbit-card:hover {
+      transform: scale(1.15) translateZ(30px) !important;
+      box-shadow: 0 25px 50px rgba(99, 102, 241, 0.35),
+                  0 0 30px rgba(236, 72, 153, 0.4);
+    }
+
+    .orbit-card.active {
+      box-shadow: 0 0 0 6px #6366f1, 0 20px 45px rgba(99, 102, 241, 0.4);
+    }
+
+    /* Icon 3D Glow */
+    .icon-3d {
+      font-size: 2.5rem;
+      background: linear-gradient(135deg, #4f46e5, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(2px 4px 6px rgba(79, 70, 229, 0.3));
+    }
+
+    /* Tab Switcher Effect */
+    .page-section {
+      display: none;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .page-section.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Custom Floating Glow Buttons */
+    .glow-btn {
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .glow-btn::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.4), transparent);
+      transform: rotate(45deg) translateY(-100%);
+      transition: transform 0.6s ease;
+    }
+
+    .glow-btn:hover::after {
+      transform: rotate(45deg) translateY(100%);
+    }
+
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-primary selection:text-white">
+<body class="min-h-screen flex flex-col justify-between">
 
-    <!-- 3D WebGL Background Canvas -->
-    <canvas id="webgl-bg"></canvas>
+  <!-- Ambient Light Mesh Background -->
+  <div class="ambient-bg"></div>
 
-    <!-- TOP TOOLBAR / NAVIGATION -->
-    <header class="sticky top-0 z-50 glass-card border-b border-slate-800/80 px-4 py-3 transition-all duration-300">
-        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-3">
+  <!-- HEADER & NAVIGATION BANNER -->
+  <header class="sticky top-0 z-50 glass-nav px-4 lg:px-8 py-3.5 shadow-sm">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-brand-600 via-indigo-500 to-accent-pink flex items-center justify-center text-white font-black text-xl shadow-lg shadow-indigo-500/30">
+          E
+        </div>
+        <div>
+          <h1 class="font-bold text-gray-900 tracking-tight text-lg leading-tight">ENSTP <span class="text-brand-600">Survival Guide</span></h1>
+          <p class="text-xs text-gray-500 font-cairo">دليل الطالب الذكي - المدرسة الوطنية العليا للأشغال العمومية</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs (2 Pages) -->
+      <nav class="flex items-center gap-2 bg-gray-100/80 p-1.5 rounded-full border border-gray-200/80 shadow-inner">
+        <button id="nav-home" onclick="switchPage('home')" class="px-5 py-2 rounded-full font-semibold text-sm transition-all duration-300 bg-white text-brand-600 shadow-md flex items-center gap-2">
+          <i class="fa-solid fa-house"></i>
+          <span>1. Accueil / Présentation</span>
+        </button>
+        <button id="nav-classes" onclick="switchPage('classes')" class="px-5 py-2 rounded-full font-semibold text-sm transition-all duration-300 text-gray-600 hover:text-brand-600 flex items-center gap-2">
+          <i class="fa-solid fa-circle-nodes"></i>
+          <span>2. Classes & Rubriques (3D Orbit)</span>
+        </button>
+      </nav>
+
+      <!-- Quick Action: Manage Classes -->
+      <div class="hidden md:flex items-center gap-3">
+        <button onclick="openManageModal()" class="glow-btn px-4 py-2 rounded-xl bg-gradient-to-r from-brand-600 to-accent-purple text-white text-xs font-bold flex items-center gap-2 shadow-md hover:shadow-indigo-500/25">
+          <i class="fa-solid fa-pen-to-square"></i>
+          <span>Gérer les Classes</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 lg:px-8 py-8 flex-grow w-full">
+
+    <!-- ================= PAGE 1: ACCUEIL & PRÉSENTATION ================= -->
+    <section id="page-home" class="page-section active space-y-12">
+      
+      <!-- Hero Presentation Banner -->
+      <div class="glass-card rounded-3xl p-8 lg:p-12 relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-8 border border-white/80">
+        <div class="space-y-6 max-w-2xl z-10">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-50 text-brand-600 border border-brand-100 text-xs font-bold uppercase tracking-wider">
+            <span class="w-2 h-2 rounded-full bg-brand-500 animate-ping"></span>
+            Projet Entrepreneuriat - ENSTP Kouba
+          </div>
+          
+          <h2 class="text-3xl lg:text-5xl font-black text-gray-900 leading-tight">
+            Bienvenue dans le <br/>
+            <span class="bg-gradient-to-r from-brand-600 via-accent-purple to-accent-pink bg-clip-text text-transparent">Guide de Survie Numérique</span>
+          </h2>
+          
+          <p class="text-gray-600 text-base lg:text-lg leading-relaxed font-cairo">
+            Ce guide interactif a été conçu pour accompagner chaque nouvel étudiant de première année à l'ENSTP. 
+            Découvrez facilement les départements, les salles de cours, les restaurants à proximité, les transports, la vie à la cité universitaire et les activités sportives.
+          </p>
+
+          <div class="flex flex-wrap items-center gap-4 pt-2">
+            <button onclick="switchPage('classes')" class="glow-btn px-6 py-3.5 rounded-2xl bg-gradient-to-r from-brand-600 to-accent-pink text-white font-bold text-sm shadow-xl shadow-brand-500/30 flex items-center gap-3">
+              <span>Explorer les Rubriques 3D</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            <a href="#quick-stats" class="px-6 py-3.5 rounded-2xl bg-white text-gray-700 font-bold text-sm border border-gray-200 hover:bg-gray-50 transition shadow-sm flex items-center gap-2">
+              <i class="fa-solid fa-circle-info text-brand-500"></i>
+              <span>En savoir plus</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- 3D Interactive Card Badge -->
+        <div class="relative w-full lg:w-96 h-80 flex items-center justify-center">
+          <div class="w-72 h-72 rounded-3xl bg-gradient-to-br from-indigo-500/20 via-pink-500/20 to-cyan-500/20 absolute blur-2xl -z-10 animate-pulse"></div>
+          
+          <div class="glass-card w-full h-full rounded-3xl p-6 flex flex-col justify-between border border-white shadow-2xl transform lg:rotate-3 hover:rotate-0 transition-transform duration-500">
+            <div class="flex items-center justify-between">
+              <div class="px-3 py-1 rounded-lg bg-emerald-100 text-emerald-700 font-bold text-xs">
+                Accès Gratuit • 100% Mobile
+              </div>
+              <i class="fa-solid fa-qrcode text-2xl text-brand-600"></i>
+            </div>
             
-            <!-- Logo -->
-            <div class="flex items-center gap-3 cursor-pointer" onclick="switchView('landing')">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary to-accent flex items-center justify-center text-white text-xl font-black shadow-lg shadow-primary/30 animate-pulse">
-                    🎓
-                </div>
-                <div>
-                    <h1 class="text-lg font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
-                        دليل الطالب <span class="text-primary">ENSTP</span>
-                    </h1>
-                    <p class="text-xs text-slate-400 font-medium">المدرسة الوطنية العليا للأشغال العمومية</p>
-                </div>
+            <div class="text-center my-auto space-y-3">
+              <div class="w-20 h-20 mx-auto rounded-full bg-gradient-to-tr from-brand-500 to-accent-pink text-white flex items-center justify-center text-3xl shadow-lg shadow-indigo-500/30">
+                <i class="fa-solid fa-graduation-cap"></i>
+              </div>
+              <h3 class="font-bold text-gray-900 text-lg">ENSTP Survival Kit</h3>
+              <p class="text-xs text-gray-500 font-cairo">Zero Dinar • Repérage Instantané • Google Maps</p>
             </div>
 
-            <!-- Global Control Bar (Theme, Font Size, Lang, Mode) -->
-            <div class="flex items-center gap-2 flex-wrap">
-                
-                <!-- Font Scaler -->
-                <div class="flex items-center bg-slate-800/60 rounded-lg p-1 border border-slate-700/50">
-                    <button onclick="changeFontSize(-1)" class="w-8 h-8 rounded text-slate-300 hover:bg-slate-700 flex items-center justify-center text-xs font-bold" title="تصغير الخط">A-</button>
-                    <button onclick="changeFontSize(1)" class="w-8 h-8 rounded text-slate-300 hover:bg-slate-700 flex items-center justify-center text-sm font-bold" title="تكبير الخط">A+</button>
-                </div>
-
-                <!-- Theme Color Selector -->
-                <div class="flex items-center gap-1.5 bg-slate-800/60 rounded-lg p-1.5 border border-slate-700/50">
-                    <button onclick="setThemeColor('default')" class="w-5 h-5 rounded-full bg-blue-500 hover:scale-110 transition-transform" title="Default Blue"></button>
-                    <button onclick="setThemeColor('purple')" class="w-5 h-5 rounded-full bg-purple-500 hover:scale-110 transition-transform" title="Neon Purple"></button>
-                    <button onclick="setThemeColor('emerald')" class="w-5 h-5 rounded-full bg-emerald-500 hover:scale-110 transition-transform" title="Emerald Green"></button>
-                    <button onclick="setThemeColor('amber')" class="w-5 h-5 rounded-full bg-amber-500 hover:scale-110 transition-transform" title="Warm Amber"></button>
-                </div>
-
-                <!-- Dark / Light Toggle -->
-                <button onclick="toggleDarkMode()" class="w-9 h-9 rounded-lg bg-slate-800/60 hover:bg-slate-700 border border-slate-700/50 flex items-center justify-center text-yellow-400 transition-all">
-                    <i id="theme-icon" class="fas fa-moon"></i>
-                </button>
-
-                <!-- Language Selector -->
-                <select id="lang-select" onchange="changeLanguage(this.value)" class="bg-slate-800/80 text-xs font-semibold text-slate-200 border border-slate-700 rounded-lg px-2.5 py-2 focus:outline-none focus:border-primary">
-                    <option value="ar">العربية 🇩🇿</option>
-                    <option value="fr">Français 🇫🇷</option>
-                    <option value="en">English 🇬🇧</option>
-                </select>
+            <div class="p-3 bg-brand-50/80 rounded-2xl border border-brand-100 flex items-center justify-between text-xs font-semibold text-brand-700">
+              <span><i class="fa-solid fa-location-dot mr-1"></i> Kouba, Alger</span>
+              <span>v1.0 Release</span>
             </div>
+          </div>
         </div>
-    </header>
+      </div>
 
-    <!-- VIEW 1: LANDING / ONBOARDING PAGE -->
-    <div id="landing-view" class="flex-1 flex flex-col justify-center items-center px-4 py-12 text-center max-w-5xl mx-auto">
-        
-        <!-- Hero Tag -->
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-primary text-xs font-semibold mb-6 animate-bounce">
-            <i class="fas fa-sparkles"></i> <span data-i18n="hero_badge">المرافق والتوجيه الشامل للطلبة 2026</span>
+      <!-- Quick Highlights Grid -->
+      <div id="quick-stats" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="glass-card p-6 rounded-2xl border border-white/80 space-y-3">
+          <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl font-bold">
+            <i class="fa-solid fa-map-location-dot"></i>
+          </div>
+          <h3 class="font-bold text-gray-900 text-lg">Carte & Orientation</h3>
+          <p class="text-sm text-gray-600">Retrouvez immédiatement vos amphithéâtres, laboratoires, salles de TD et services administratifs sans vous perdre.</p>
         </div>
 
-        <!-- Title -->
-        <h1 class="text-4xl md:text-6xl font-black mb-6 leading-tight" data-i18n="landing_title">
-            مرحباً بك في <span class="bg-gradient-to-r from-primary via-accent to-purple-400 bg-clip-text text-transparent">دليل الطالب ENSTP</span>
-        </h1>
+        <div class="glass-card p-6 rounded-2xl border border-white/80 space-y-3">
+          <div class="w-12 h-12 rounded-xl bg-pink-100 text-pink-600 flex items-center justify-center text-xl font-bold">
+            <i class="fa-solid fa-utensils"></i>
+          </div>
+          <h3 class="font-bold text-gray-900 text-lg">Vie Pratique & Resto</h3>
+          <p class="text-sm text-gray-600">Restauration petit budget, supérettes du soir, papeteries, reprographie et lignes de bus autour de l'ENSTP.</p>
+        </div>
 
-        <!-- Subtitle -->
-        <p class="text-slate-300 md:text-lg max-w-2xl mb-10 leading-relaxed" data-i18n="landing_desc">
-            دليلك الشامل لرحلتك الجامعية بالمدرسة الوطنية العليا للأشغال العمومية. استكشف الدروس، المطاعم والوجبات، وسائل النقل، السكن، المنتدى الطلابي، والمساعد الذكي.
+        <div class="glass-card p-6 rounded-2xl border border-white/80 space-y-3">
+          <div class="w-12 h-12 rounded-xl bg-cyan-100 text-cyan-600 flex items-center justify-center text-xl font-bold">
+            <i class="fa-solid fa-users"></i>
+          </div>
+          <h3 class="font-bold text-gray-900 text-lg">Entraide & Cité U</h3>
+          <p class="text-sm text-gray-600">Réseau d'entraide entre étudiants (covoiturage inter-wilayas), clubs sportifs (Running Club) et sorties à Alger.</p>
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- ================= PAGE 2: CLASSES & RUBRIQUES (3D CIRCULAR CAROUSEL) ================= -->
+    <section id="page-classes" class="page-section space-y-8">
+      
+      <div class="text-center max-w-2xl mx-auto space-y-2">
+        <span class="px-3 py-1 rounded-full bg-pink-100 text-pink-600 font-bold text-xs uppercase tracking-wider">
+          Animation Circulaire 3D
+        </span>
+        <h2 class="text-3xl font-black text-gray-900">Les Classes & Rubriques du Guide</h2>
+        <p class="text-sm text-gray-500 font-cairo">
+          Cliquez sur une classe ou utilisez les contrôles pour faire tourner le cercle 3D. 
+          Une rubrique s'avance tandis que la suivante la suit avec fluidité.
         </p>
+      </div>
 
-        <!-- CTA Button -->
-        <button onclick="switchView('main')" class="group relative inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-primary to-secondary text-white font-bold text-lg shadow-xl shadow-primary/30 hover:shadow-primary/50 transition-all duration-300 hover:scale-105 active:scale-95">
-            <span data-i18n="start_btn">ابدأ الاستكشاف الآن</span>
-            <i class="fas fa-arrow-left group-hover:-translate-x-2 transition-transform ltr:rotate-180"></i>
-        </button>
-
-        <!-- Team & Credits Section -->
-        <div class="mt-16 pt-8 border-t border-slate-800/80 w-full max-w-3xl">
-            <p class="text-xs text-slate-400 mb-4 font-semibold uppercase tracking-widest" data-i18n="team_title">تم الإنجاز والمساهمة بواسطة طلبة المدرسة</p>
-            <div class="flex flex-wrap justify-center gap-4 text-xs font-medium text-slate-300">
-                <span class="px-3 py-1.5 rounded-lg glass-card border border-slate-700/50"><i class="fas fa-code text-primary mr-1"></i> Dib Group Deux</span>
-                <span class="px-3 py-1.5 rounded-lg glass-card border border-slate-700/50"><i class="fas fa-heart text-red-500 mr-1"></i> ENSTP Students</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- VIEW 2: MAIN DASHBOARD & ALL SECTIONS -->
-    <div id="main-view" class="hidden flex-1 max-w-7xl w-full mx-auto px-4 py-8">
+      <!-- 3D Circular Orbit Display -->
+      <div class="relative glass-card rounded-3xl p-6 lg:p-10 border border-white overflow-hidden shadow-xl">
         
-        <!-- Navigation Tabs -->
-        <div class="flex items-center gap-2 overflow-x-auto pb-4 mb-8 custom-scroll border-b border-slate-800/80">
-            <button onclick="switchSection('food')" id="tab-food" class="tab-btn active px-4 py-2.5 rounded-xl font-semibold text-sm whitespace-nowrap bg-primary text-white shadow-lg transition-all">
-                <i class="fas fa-utensils mr-2"></i> <span data-i18n="tab_food">الأكل والتسوق</span>
+        <!-- Controls Bar -->
+        <div class="flex items-center justify-between mb-4 z-20 relative">
+          <button onclick="rotateOrbit(-1)" class="w-10 h-10 rounded-full bg-white text-gray-700 shadow-md hover:bg-brand-600 hover:text-white transition flex items-center justify-center">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+          
+          <div class="flex items-center gap-3">
+            <button onclick="toggleAutoRotate()" id="autorotate-btn" class="px-4 py-1.5 rounded-full bg-emerald-100 text-emerald-700 font-bold text-xs flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              Rotation Automatique: ON
             </button>
-            <button onclick="switchSection('leisure')" id="tab-leisure" class="tab-btn px-4 py-2.5 rounded-xl font-semibold text-sm whitespace-nowrap glass-card hover:bg-slate-800 text-slate-300 transition-all">
-                <i class="fas fa-tree mr-2"></i> <span data-i18n="tab_leisure">الترفيه والثقافة</span>
+            <button onclick="openAddClassModal()" class="px-3 py-1.5 rounded-full bg-brand-100 text-brand-700 hover:bg-brand-200 text-xs font-bold">
+              <i class="fa-solid fa-plus mr-1"></i> Ajouter
             </button>
-            <button onclick="switchSection('forum')" id="tab-forum" class="tab-btn px-4 py-2.5 rounded-xl font-semibold text-sm whitespace-nowrap glass-card hover:bg-slate-800 text-slate-300 transition-all">
-                <i class="fas fa-comments mr-2"></i> <span data-i18n="tab_forum">منتدى الطلاب</span>
-            </button>
-            <button onclick="switchSection('academic')" id="tab-academic" class="tab-btn px-4 py-2.5 rounded-xl font-semibold text-sm whitespace-nowrap glass-card hover:bg-slate-800 text-slate-300 transition-all">
-                <i class="fas fa-graduation-cap mr-2"></i> <span data-i18n="tab_academic">الدراسة والامتحانات</span>
-            </button>
-            <button onclick="switchSection('transport')" id="tab-transport" class="tab-btn px-4 py-2.5 rounded-xl font-semibold text-sm whitespace-nowrap glass-card hover:bg-slate-800 text-slate-300 transition-all">
-                <i class="fas fa-bus mr-2"></i> <span data-i18n="tab_transport">النقل والمواصلات</span>
-            </button>
+          </div>
+
+          <button onclick="rotateOrbit(1)" class="w-10 h-10 rounded-full bg-white text-gray-700 shadow-md hover:bg-brand-600 hover:text-white transition flex items-center justify-center">
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
         </div>
 
-        <!-- SECTION 1: FOOD & SHOPPING -->
-        <div id="sec-food" class="section-content space-y-6">
-            <div class="flex justify-between items-center flex-wrap gap-4">
-                <div>
-                    <h2 class="text-2xl font-bold" data-i18n="food_heading">المطاعم والمحلات المجهزة بالـ Menus</h2>
-                    <p class="text-sm text-slate-400" data-i18n="food_sub">اكتشف المطاعم المجاورة للجامعة والقوائم والأسعار مع آراء الطلاب</p>
-                </div>
-            </div>
-
-            <!-- Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                
-                <!-- Restaurant 1 -->
-                <div class="glass-card rounded-2xl p-5 card-3d flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <div>
-                                <h3 class="text-lg font-bold">مطعم الفلفل والأرز</h3>
-                                <span class="text-xs text-primary font-medium"><i class="fas fa-map-marker-alt"></i> 350 متر عن ENSTP</span>
-                            </div>
-                            <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/20 text-green-400 border border-green-500/30">اقتصادي</span>
-                        </div>
-                        <p class="text-xs text-slate-300 mb-4">أكلات سريعة، وجبات تقليدية، وسندويشات متنوعة.</p>
-                        <div class="text-xs text-slate-400 space-y-1 mb-4">
-                            <p><i class="far fa-clock text-primary"></i> أوقات الفتح: 11:30 - 22:00</p>
-                            <p><i class="fas fa-star text-yellow-400"></i> 4.5 / 5 (120 تقييم)</p>
-                        </div>
-                    </div>
-                    <button onclick="openMenuModal('الفلفل والأرز')" class="w-full py-2.5 rounded-xl bg-primary/20 hover:bg-primary text-primary hover:text-white font-semibold text-sm border border-primary/30 transition-all">
-                        <i class="fas fa-book-open mr-2"></i> عرض قائمة الطعام (Menu)
-                    </button>
-                </div>
-
-                <!-- Restaurant 2 -->
-                <div class="glass-card rounded-2xl p-5 card-3d flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <div>
-                                <h3 class="text-lg font-bold">مطعم التفاح</h3>
-                                <span class="text-xs text-primary font-medium"><i class="fas fa-map-marker-alt"></i> 500 متر عن القبة</span>
-                            </div>
-                            <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">متوسط</span>
-                        </div>
-                        <p class="text-xs text-slate-300 mb-4">وجبات غداء يومية، مشاوي، وأطباق إيطالية.</p>
-                        <div class="text-xs text-slate-400 space-y-1 mb-4">
-                            <p><i class="far fa-clock text-primary"></i> أوقات الفتح: 11:00 - 23:00</p>
-                            <p><i class="fas fa-star text-yellow-400"></i> 4.8 / 5 (85 تقييم)</p>
-                        </div>
-                    </div>
-                    <button onclick="openMenuModal('مطعم التفاح')" class="w-full py-2.5 rounded-xl bg-primary/20 hover:bg-primary text-primary hover:text-white font-semibold text-sm border border-primary/30 transition-all">
-                        <i class="fas fa-book-open mr-2"></i> عرض قائمة الطعام (Menu)
-                    </button>
-                </div>
-
-            </div>
+        <!-- The 3D Stage -->
+        <div class="orbit-stage">
+          <div id="orbit-ring" class="orbit-ring">
+            <!-- Dynamic Cards Injected via JS -->
+          </div>
         </div>
 
-        <!-- SECTION 2: LEISURE -->
-        <div id="sec-leisure" class="section-content hidden space-y-6">
-            <h2 class="text-2xl font-bold">مناطق الترفيه والثقافة القريبة</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="glass-card rounded-2xl p-5 card-3d">
-                    <h3 class="text-lg font-bold mb-2">منتزه حديقة التجارب الحامة</h3>
-                    <p class="text-xs text-slate-300 mb-4">من أجمل الحدائق التاريخية في الجزائر، مكان مثالي للاسترخاء والدراسة في الهواء الطلق.</p>
-                    <div class="text-xs text-slate-400 space-y-1">
-                        <p><i class="fas fa-route"></i> المسافة: 3.5 كلم (10 دقائق بالمترو)</p>
-                        <p><i class="fas fa-utensils"></i> المطاعم القريبة: مطاعم الحامة الشعبية ومقاهي المنتزه</p>
-                    </div>
-                </div>
-            </div>
+        <!-- Selected Class Detail Card -->
+        <div id="class-detail-card" class="mt-6 p-6 glass-card rounded-2xl border border-white/90 shadow-lg transition-all duration-500">
+          <!-- Injected detail header and actions -->
         </div>
 
-        <!-- SECTION 3: FORUM -->
-        <div id="sec-forum" class="section-content hidden space-y-6">
-            <div class="flex justify-between items-center">
-                <h2 class="text-2xl font-bold">منتدى الطلاب</h2>
-                <button onclick="alert('خاصية إضافة منشور جديد')" class="px-4 py-2 rounded-xl bg-primary text-white font-bold text-sm shadow-md">
-                    + إضافة منشور
-                </button>
-            </div>
-            <div class="glass-card rounded-2xl p-5">
-                <div class="flex items-center gap-3 mb-3">
-                    <div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center font-bold text-xs">أ</div>
-                    <div>
-                        <h4 class="text-sm font-bold">أمين - طالب سنة ثانية</h4>
-                        <span class="text-xs text-slate-400">منذ ساعة</span>
-                    </div>
-                </div>
-                <p class="text-xs text-slate-200 mb-4">هل من نصائح حول تحضير امتحانات الميكانيك الخطي هذا السداسي؟</p>
-                <div class="flex items-center gap-4 text-xs text-slate-400">
-                    <button class="hover:text-primary"><i class="far fa-heart"></i> 15 إعجاب</button>
-                    <button class="hover:text-primary"><i class="far fa-comment"></i> 4 تعليقات</button>
-                </div>
-            </div>
-        </div>
+      </div>
 
-    </div>
+    </section>
 
-    <!-- AI CHATBOT FLOATING BUTTON & WINDOW -->
-    <div class="fixed bottom-6 right-6 z-50">
-        <button onclick="toggleAIChat()" class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-primary to-accent text-white shadow-2xl flex items-center justify-center text-2xl hover:scale-110 transition-transform">
-            🤖
+  </main>
+
+  <!-- EDIT / MANAGE MODAL -->
+  <div id="manage-modal" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="glass-card bg-white/95 rounded-3xl max-w-xl w-full p-6 lg:p-8 space-y-6 border border-white shadow-2xl relative">
+      <div class="flex items-center justify-between border-b pb-4">
+        <h3 class="font-bold text-lg text-gray-900 flex items-center gap-2">
+          <i class="fa-solid fa-sliders text-brand-600"></i>
+          Gérer / Modifier les Classes du Guide
+        </h3>
+        <button onclick="closeManageModal()" class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 flex items-center justify-center">
+          <i class="fa-solid fa-xmark"></i>
         </button>
+      </div>
+
+      <!-- List of Classes with Edit Options -->
+      <div id="modal-classes-list" class="max-h-60 overflow-y-auto space-y-3 pr-2">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <div class="border-t pt-4 flex justify-between items-center">
+        <button onclick="openAddClassModal()" class="px-4 py-2 rounded-xl bg-emerald-500 text-white font-bold text-xs flex items-center gap-2 shadow-md hover:bg-emerald-600">
+          <i class="fa-solid fa-plus"></i>
+          Ajouter une nouvelle classe
+        </button>
+        <button onclick="closeManageModal()" class="px-5 py-2 rounded-xl bg-gray-200 text-gray-700 font-bold text-xs hover:bg-gray-300">
+          Fermer
+        </button>
+      </div>
     </div>
+  </div>
 
-    <!-- AI CHAT MODAL -->
-    <div id="ai-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-card rounded-3xl max-w-lg w-full h-[500px] flex flex-col p-5">
-            <div class="flex justify-between items-center pb-3 border-b border-slate-700">
-                <h3 class="font-bold flex items-center gap-2">🤖 المساعد الذكي ENSTP AI</h3>
-                <button onclick="toggleAIChat()" class="text-slate-400 hover:text-white"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="flex-1 overflow-y-auto my-4 space-y-3 custom-scroll text-xs">
-                <div class="bg-slate-800 p-3 rounded-2xl max-w-[80%]">مرحباً! كيف يمكنني مساعدتك اليوم بخصوص الدراسة والمرفقات في ENSTP؟</div>
-            </div>
-            <div class="flex gap-2 pt-2 border-t border-slate-700">
-                <input type="text" placeholder="اكتب سؤالك هنا..." class="flex-1 bg-slate-800 text-xs text-white rounded-xl px-3 py-2 border border-slate-700 focus:outline-none">
-                <button class="px-4 py-2 bg-primary rounded-xl text-xs font-bold">إرسال</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- SCRIPT LOGIC -->
-    <script>
-        // Language Translations Object
-        const translations = {
-            ar: {
-                hero_badge: "المرافق والتوجيه الشامل للطلبة 2026",
-                landing_title: "مرحباً بك في دليل الطالب ENSTP",
-                landing_desc: "دليلك الشامل لرحلتك الجامعية بالمدرسة الوطنية العليا للأشغال العمومية. استكشف الدروس، المطاعم والوجبات، وسائل النقل، السكن، المنتدى الطلابي، والمساعد الذكي.",
-                start_btn: "ابدأ الاستكشاف الآن",
-                team_title: "تم الإنجاز والمساهمة بواسطة طلبة المدرسة",
-                tab_food: "الأكل والتسوق",
-                tab_leisure: "الترفيه والثقافة",
-                tab_forum: "منتدى الطلاب",
-                tab_academic: "الدراسة والامتحانات",
-                tab_transport: "النقل والمواصلات",
-                food_heading: "المطاعم والمحلات المجهزة بالـ Menus",
-                food_sub: "اكتشف المطاعم المجاورة للجامعة والقوائم والأسعار مع آراء الطلاب"
-            },
-            fr: {
-                hero_badge: "Guide & Orientation 2026",
-                landing_title: "Bienvenue sur le Guide Étudiant ENSTP",
-                landing_desc: "Votre guide complet à l'ENSTP. Explorez les cours, les menus des restaurants, le transport, le forum et l'assistant IA.",
-                start_btn: "Commencer l'exploration",
-                team_title: "Réalisé par les étudiants de l'ENSTP",
-                tab_food: "Restauration",
-                tab_leisure: "Loisirs & Culture",
-                tab_forum: "Forum Étudiant",
-                tab_academic: "Études & Examens",
-                tab_transport: "Transport",
-                food_heading: "Restaurants et Menus",
-                food_sub: "Découvrez les restaurants proches, leurs menus et avis"
-            },
-            en: {
-                hero_badge: "Student Guide 2026",
-                landing_title: "Welcome to ENSTP Student Guide",
-                landing_desc: "Your essential guide at ENSTP. Discover modules, restaurant menus, transport, student forum, and AI Assistant.",
-                start_btn: "Start Exploring Now",
-                team_title: "Created by ENSTP Students",
-                tab_food: "Food & Dining",
-                tab_leisure: "Leisure & Culture",
-                tab_forum: "Student Forum",
-                tab_academic: "Academics",
-                tab_transport: "Transport",
-                food_heading: "Restaurants & Menus",
-                food_sub: "Discover nearby restaurants, menus, prices, and reviews"
-            }
-        };
-
-        let currentLang = 'ar';
-        let currentFontSize = 16;
-
-        function switchView(view) {
-            if(view === 'main') {
-                document.getElementById('landing-view').classList.add('hidden');
-                document.getElementById('main-view').classList.remove('hidden');
-            } else {
-                document.getElementById('landing-view').classList.remove('hidden');
-                document.getElementById('main-view').classList.add('hidden');
-            }
-        }
-
-        function switchSection(sec) {
-            document.querySelectorAll('.section-content').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.tab-btn').forEach(el => {
-                el.classList.remove('bg-primary', 'text-white');
-                el.classList.add('glass-card', 'text-slate-300');
-            });
-            
-            document.getElementById('sec-' + sec).classList.remove('hidden');
-            const activeTab = document.getElementById('tab-' + sec);
-            activeTab.classList.add('bg-primary', 'text-white');
-            activeTab.classList.remove('glass-card', 'text-slate-300');
-        }
-
-        function changeLanguage(lang) {
-            currentLang = lang;
-            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if(translations[lang][key]) el.innerText = translations[lang][key];
-            });
-        }
-
-        function toggleDarkMode() {
-            document.body.classList.toggle('light');
-            document.body.classList.toggle('dark');
-        }
-
-        function setThemeColor(theme) {
-            document.body.className = document.body.className.replace(/theme-\w+/g, '');
-            if(theme !== 'default') document.body.classList.add('theme-' + theme);
-        }
-
-        function changeFontSize(delta) {
-            currentFontSize = Math.min(Math.max(12, currentFontSize + delta), 22);
-            document.documentElement.style.fontSize = currentFontSize + 'px';
-        }
-
-        function toggleAIChat() {
-            document.getElementById('ai-modal').classList.toggle('hidden');
-        }
-
-        function openMenuModal(name) {
-            alert('قائمة الطعام الممتدة لمطعم: ' + name + '\n\n- أطباق يومية (400 دج)\n- سندويش دجاج (250 دج)\n- مشروبات منعشة (70 دج)');
-        }
-
-        // 3D Particles Canvas Script
-        const canvas = document.getElementById('webgl-bg');
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+  <!-- ADD / EDIT CLASS FORM MODAL -->
+  <div id="form-modal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="glass-card bg-white/95 rounded-3xl max-w-md w-full p-6 space-y-4 border border-white shadow-2xl">
+      <h3 id="form-modal-title" class="font-bold text-lg text-gray-900">Ajouter une Classe</h3>
+      
+      <form id="class-form" onsubmit="handleFormSubmit(event)" class="space-y-3">
+        <input type="hidden" id="form-class-id" />
         
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        camera.position.z = 30;
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Titre de la Classe / Rubrique</label>
+          <input type="text" id="form-title" required class="w-full px-3.5 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm" placeholder="Ex: Cartographie & Salles" />
+        </div>
 
-        const geometry = new THREE.BufferGeometry();
-        const count = 300;
-        const positions = new Float32Array(count * 3);
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Icône FontAwesome 3D</label>
+          <input type="text" id="form-icon" required class="w-full px-3.5 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm" placeholder="Ex: fa-map-location-dot" />
+          <p class="text-[10px] text-gray-400 mt-1">Exexmples: fa-map-location-dot, fa-utensils, fa-bus, fa-futbol, fa-briefcase</p>
+        </div>
 
-        for(let i = 0; i < count * 3; i++) {
-            positions[i] = (Math.random() - 0.5) * 100;
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Description courte</label>
+          <textarea id="form-desc" rows="3" required class="w-full px-3.5 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm" placeholder="Description de la classe..."></textarea>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Couleur d'accentuation</label>
+          <select id="form-color" class="w-full px-3.5 py-2 rounded-xl border border-gray-200 text-sm">
+            <option value="from-indigo-500 to-pink-500">Indigo - Rose</option>
+            <option value="from-emerald-400 to-teal-600">Émeraude - Teinté</option>
+            <option value="from-amber-400 to-orange-500">Ambre - Orange</option>
+            <option value="from-cyan-400 to-blue-600">Cyan - Bleu</option>
+            <option value="from-purple-500 to-pink-600">Violet - Magenta</option>
+          </select>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeFormModal()" class="px-4 py-2 rounded-xl bg-gray-200 text-gray-700 text-xs font-bold">Annuler</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-brand-600 text-white text-xs font-bold shadow-md hover:bg-brand-700">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="glass-nav border-t border-gray-200 mt-12 py-6 px-4 text-center text-xs text-gray-500 font-cairo">
+    <p>© 2026 ENSTP Kouba — Projet Entrepreneuriat "Guide de Survie du Nouvel Étudiant". Zéro Dinar & Open Platform.</p>
+  </footer>
+
+  <!-- SCRIPT & DYNAMIC LOGIC -->
+  <script>
+    // Initial Default Data (Classes de Guide)
+    let guideClasses = [
+      {
+        id: 1,
+        title: "Carte & Orientation",
+        icon: "fa-map-location-dot",
+        desc: "Localisation exacte des bâtiments, amphithéâtres (A, B, C), salles de cours/TD/TP, laboratoires et administration.",
+        color: "from-indigo-500 to-pink-500"
+      },
+      {
+        id: 2,
+        title: "Où Manger ?",
+        icon: "fa-utensils",
+        desc: "Restos pas chers autour de l'ENSTP, cafétérias, pizzerias, supérettes du soir et boulangeries de proximité.",
+        color: "from-amber-400 to-orange-500"
+      },
+      {
+        id: 3,
+        title: "Transports & Bus",
+        icon: "fa-bus",
+        desc: "Arrêts de bus vers Kouba, taxi, itinéraires à pied et correspondances universitaires.",
+        color: "from-cyan-400 to-blue-600"
+      },
+      {
+        id: 4,
+        title: "Impression & Taxis",
+        icon: "fa-print",
+        desc: "Papeteries gratuites/low-cost, tirage de plans techniques, photocopies et fournitures scolaires.",
+        color: "from-purple-500 to-pink-600"
+      },
+      {
+        id: 5,
+        title: "Sport ENSTP",
+        icon: "fa-futbol",
+        desc: "Installations sportives, ENSTP Running Club, tournois de football et basketball entre promotions.",
+        color: "from-emerald-400 to-teal-600"
+      },
+      {
+        id: 6,
+        title: "Cité U & Réseau",
+        icon: "fa-handshake-angle",
+        desc: "Guide de survie pour les internes en cité U et réseau d'entraide entre wilayas (ENSTP Network).",
+        color: "from-rose-500 to-red-500"
+      }
+    ];
+
+    let currentAngle = 0;
+    let activeIndex = 0;
+    let autoRotateInterval = null;
+    let isAutoRotating = true;
+
+    // PAGE SWITCHING (Page 1 vs Page 2)
+    function switchPage(page) {
+      document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+      document.getElementById(`page-${page}`).classList.add('active');
+
+      const btnHome = document.getElementById('nav-home');
+      const btnClasses = document.getElementById('nav-classes');
+
+      if (page === 'home') {
+        btnHome.className = "px-5 py-2 rounded-full font-semibold text-sm transition-all duration-300 bg-white text-brand-600 shadow-md flex items-center gap-2";
+        btnClasses.className = "px-5 py-2 rounded-full font-semibold text-sm transition-all duration-300 text-gray-600 hover:text-brand-600 flex items-center gap-2";
+      } else {
+        btnClasses.className = "px-5 py-2 rounded-full font-semibold text-sm transition-all duration-300 bg-white text-brand-600 shadow-md flex items-center gap-2";
+        btnHome.className = "px-5 py-2 rounded-full font-semibold text-sm transition-all duration-300 text-gray-600 hover:text-brand-600 flex items-center gap-2";
+        render3DOrbit();
+      }
+    }
+
+    // 3D ORBIT CAROUSEL RENDER
+    function render3DOrbit() {
+      const ring = document.getElementById('orbit-ring');
+      ring.innerHTML = '';
+
+      const total = guideClasses.length;
+      const radius = 170; // Orbit radius in pixels
+
+      guideClasses.forEach((cls, index) => {
+        const angle = (index / total) * (2 * Math.PI);
+        const x = Math.round(radius * Math.cos(angle));
+        const z = Math.round(radius * Math.sin(angle));
+
+        const card = document.createElement('div');
+        card.className = `orbit-card ${index === activeIndex ? 'active' : ''}`;
+        card.style.transform = `translate3d(${x}px, 0px, ${z}px)`;
+        card.onclick = () => selectCard(index);
+
+        card.innerHTML = `
+          <div class="w-12 h-12 rounded-full bg-gradient-to-tr ${cls.color} flex items-center justify-center text-white text-xl shadow-md mb-1">
+            <i class="fa-solid ${cls.icon}"></i>
+          </div>
+          <span class="text-[11px] font-extrabold text-gray-800 text-center px-2 line-clamp-1">${cls.title}</span>
+        `;
+
+        ring.appendChild(card);
+      });
+
+      updateDetailCard();
+    }
+
+    // ROTATE ORBIT
+    function rotateOrbit(direction) {
+      const total = guideClasses.length;
+      activeIndex = (activeIndex + direction + total) % total;
+      
+      const stepAngle = 360 / total;
+      currentAngle += direction * stepAngle;
+      
+      const ring = document.getElementById('orbit-ring');
+      ring.style.transform = `rotateY(${-currentAngle}deg)`;
+
+      // Update active highlight
+      const cards = ring.children;
+      for (let i = 0; i < cards.length; i++) {
+        if (i === activeIndex) cards[i].classList.add('active');
+        else cards[i].classList.remove('active');
+      }
+
+      updateDetailCard();
+    }
+
+    function selectCard(index) {
+      const diff = index - activeIndex;
+      rotateOrbit(diff);
+    }
+
+    function toggleAutoRotate() {
+      const btn = document.getElementById('autorotate-btn');
+      if (isAutoRotating) {
+        clearInterval(autoRotateInterval);
+        isAutoRotating = false;
+        btn.className = "px-4 py-1.5 rounded-full bg-gray-100 text-gray-600 font-bold text-xs flex items-center gap-2";
+        btn.innerHTML = `<span class="w-2 h-2 rounded-full bg-gray-400"></span> Rotation Automatique: OFF`;
+      } else {
+        startAutoRotate();
+        isAutoRotating = true;
+        btn.className = "px-4 py-1.5 rounded-full bg-emerald-100 text-emerald-700 font-bold text-xs flex items-center gap-2";
+        btn.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Rotation Automatique: ON`;
+      }
+    }
+
+    function startAutoRotate() {
+      clearInterval(autoRotateInterval);
+      autoRotateInterval = setInterval(() => {
+        rotateOrbit(1);
+      }, 3200);
+    }
+
+    // UPDATE DETAIL CARD
+    function updateDetailCard() {
+      const cls = guideClasses[activeIndex];
+      const detail = document.getElementById('class-detail-card');
+      
+      detail.innerHTML = `
+        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div class="flex items-center gap-4">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr ${cls.color} text-white flex items-center justify-center text-2xl shadow-lg">
+              <i class="fa-solid ${cls.icon}"></i>
+            </div>
+            <div>
+              <span class="text-xs text-brand-600 font-bold">Classe #${cls.id}</span>
+              <h3 class="text-xl font-bold text-gray-900">${cls.title}</h3>
+              <p class="text-xs text-gray-500 font-cairo mt-0.5">${cls.desc}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 w-full md:w-auto">
+            <button onclick="editClass(${cls.id})" class="px-4 py-2 rounded-xl bg-gray-100 text-gray-700 font-bold text-xs hover:bg-gray-200 transition">
+              <i class="fa-solid fa-pen mr-1"></i> Modifier
+            </button>
+            <button class="px-5 py-2.5 rounded-xl bg-gradient-to-r ${cls.color} text-white font-bold text-xs shadow-md">
+              Ouvrir le Module <i class="fa-solid fa-arrow-right ml-1"></i>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // MANAGING / MODAL LOGIC
+    function openManageModal() {
+      const list = document.getElementById('modal-classes-list');
+      list.innerHTML = '';
+
+      guideClasses.forEach(cls => {
+        const item = document.createElement('div');
+        item.className = "p-3 bg-gray-50 rounded-xl border border-gray-200 flex items-center justify-between";
+        item.innerHTML = `
+          <div class="flex items-center gap-3">
+            <i class="fa-solid ${cls.icon} text-brand-600 text-lg"></i>
+            <div>
+              <h4 class="font-bold text-xs text-gray-800">${cls.title}</h4>
+              <p class="text-[10px] text-gray-400 line-clamp-1">${cls.desc}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-1">
+            <button onclick="editClass(${cls.id})" class="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg text-xs"><i class="fa-solid fa-pen"></i></button>
+            <button onclick="deleteClass(${cls.id})" class="p-2 text-red-500 hover:bg-red-50 rounded-lg text-xs"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        `;
+        list.appendChild(item);
+      });
+
+      document.getElementById('manage-modal').classList.remove('hidden');
+    }
+
+    function closeManageModal() {
+      document.getElementById('manage-modal').classList.add('hidden');
+    }
+
+    function openAddClassModal() {
+      document.getElementById('form-modal-title').innerText = "Ajouter une nouvelle Classe";
+      document.getElementById('form-class-id').value = "";
+      document.getElementById('class-form').reset();
+      document.getElementById('form-modal').classList.remove('hidden');
+    }
+
+    function closeFormModal() {
+      document.getElementById('form-modal').classList.add('hidden');
+    }
+
+    function editClass(id) {
+      const cls = guideClasses.find(c => c.id === id);
+      if (!cls) return;
+
+      closeManageModal();
+      document.getElementById('form-modal-title').innerText = "Modifier la Classe";
+      document.getElementById('form-class-id').value = cls.id;
+      document.getElementById('form-title').value = cls.title;
+      document.getElementById('form-icon').value = cls.icon;
+      document.getElementById('form-desc').value = cls.desc;
+      document.getElementById('form-color').value = cls.color;
+
+      document.getElementById('form-modal').classList.remove('hidden');
+    }
+
+    function deleteClass(id) {
+      if (guideClasses.length <= 3) {
+        alert("Conservez au moins 3 classes pour maintenir l'effet orbital 3D.");
+        return;
+      }
+      guideClasses = guideClasses.filter(c => c.id !== id);
+      activeIndex = 0;
+      openManageModal();
+      render3DOrbit();
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const id = document.getElementById('form-class-id').value;
+      const title = document.getElementById('form-title').value;
+      const icon = document.getElementById('form-icon').value;
+      const desc = document.getElementById('form-desc').value;
+      const color = document.getElementById('form-color').value;
+
+      if (id) {
+        // Edit existing
+        const index = guideClasses.findIndex(c => c.id == id);
+        if (index !== -1) {
+          guideClasses[index] = { id: parseInt(id), title, icon, desc, color };
         }
+      } else {
+        // Add new
+        const newId = guideClasses.length ? Math.max(...guideClasses.map(c => c.id)) + 1 : 1;
+        guideClasses.push({ id: newId, title, icon, desc, color });
+      }
 
-        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        const material = new THREE.PointsMaterial({ size: 1.5, color: 0x3b82f6, transparent: true, opacity: 0.6 });
-        const points = new THREE.Points(geometry, material);
-        scene.add(points);
+      closeFormModal();
+      render3DOrbit();
+    }
 
-        function animate() {
-            requestAnimationFrame(animate);
-            points.rotation.y += 0.001;
-            points.rotation.x += 0.0005;
-            renderer.render(scene, camera);
-        }
-        animate();
-
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-    </script>
+    // INIT
+    window.addEventListener('DOMContentLoaded', () => {
+      render3DOrbit();
+      startAutoRotate();
+    });
+  </script>
 </body>
 </html>
